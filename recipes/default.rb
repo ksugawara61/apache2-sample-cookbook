@@ -9,6 +9,7 @@ end
 
 service 'apache2' do
   action %i[enable start]
+  subscribes :reload, 'template[apache2.conf]'
 end
 
 template 'apache2.conf' do
@@ -16,5 +17,8 @@ template 'apache2.conf' do
   owner 'root'
   group 'root'
   mode '0644'
-  notifies :reload, 'service[apache2]'
+  # notifies :reload, 'service[apache2]'
+  variables(
+    hostname: node['hostname']
+  )
 end
